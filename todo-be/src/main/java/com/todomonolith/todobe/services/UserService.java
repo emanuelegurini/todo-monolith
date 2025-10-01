@@ -13,12 +13,14 @@ public class UserService {
 
     private UserRepository userRepository;
 
-    public User save(String name, String surname, String email) {
+    public User save(User user) {
         System.out.println("starting saving user");
-        var user = User.builder().name(name).surname(surname).email(email).build();
         userRepository.save(user);
-        System.out.println(user);
         return user;
+    }
+
+    public Iterable<User> findAll() {
+        return userRepository.findAll();
     }
 
     public Optional<User> findById(Long id) {
