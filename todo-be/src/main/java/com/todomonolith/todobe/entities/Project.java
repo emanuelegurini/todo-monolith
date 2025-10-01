@@ -40,5 +40,4 @@ public class Project {
     )
     @ToString.Exclude
     private Set<Tag> tags = new HashSet<>();
-
 }
