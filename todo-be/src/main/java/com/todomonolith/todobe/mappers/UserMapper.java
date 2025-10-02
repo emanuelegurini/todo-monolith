@@ -26,6 +26,18 @@ public class UserMapper {
                .build();
     }
 
+    public User toEntity(UserDTO userDTO) {
+        if (userDTO == null) {
+            return null;
+        }
+
+        return User.builder()
+                .name(userDTO.getName())
+                .surname(userDTO.getSurname())
+                .email(userDTO.getEmail())
+                .build();
+    }
+
     public List<UserDTO> toDTOList(List<User> users) {
         return users.stream()
                 .map(this::toDTO)

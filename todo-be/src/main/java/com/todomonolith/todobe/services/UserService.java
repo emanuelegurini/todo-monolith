@@ -1,6 +1,9 @@
 package com.todomonolith.todobe.services;
 
+import com.todomonolith.todobe.entities.Setting;
 import com.todomonolith.todobe.entities.User;
+import com.todomonolith.todobe.enums.AccountTypeEnum;
+import com.todomonolith.todobe.enums.ThemeEnum;
 import com.todomonolith.todobe.repositories.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,10 +16,17 @@ public class UserService {
 
     private UserRepository userRepository;
 
-    public User save(User user) {
-        System.out.println("starting saving user");
+    public void save(User user) {
+
+        var defaultSetting = Setting.builder()
+                .theme(ThemeEnum.LIGHT)
+                .accountType(AccountTypeEnum.FREE)
+                .user(user)
+                .build();
+
+        user.setSetting(defaultSetting);
+
         userRepository.save(user);
-        return user;
     }
 
     public Iterable<User> findAll() {

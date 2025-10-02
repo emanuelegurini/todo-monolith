@@ -25,6 +25,13 @@ public class UserController {
         return userMapper.toDTOList((List<User>) userService.findAll());
     }
 
+    @PostMapping
+    public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) {
+        var user = userMapper.toEntity(userDTO);
+        userService.save(user);
+        return ResponseEntity.ok(userMapper.toDTO(user));
+    }
+
     @GetMapping("/{id}")
     public Optional<UserDTO> getUser(@PathVariable Long id) {
         return userService.findById(id).map(userMapper::toDTO);
