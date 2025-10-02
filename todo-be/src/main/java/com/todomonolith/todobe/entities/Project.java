@@ -1,6 +1,7 @@
 package com.todomonolith.todobe.entities;
 
 
+import com.todomonolith.todobe.enums.ProjectStatusEnum;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -31,6 +32,10 @@ public class Project {
     @JoinColumn(name = "user_id")
     @ToString.Exclude
     private User user;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private ProjectStatusEnum status;
 
     @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE } )
     @JoinTable(

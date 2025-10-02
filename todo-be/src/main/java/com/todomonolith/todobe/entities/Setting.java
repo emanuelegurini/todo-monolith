@@ -1,5 +1,7 @@
 package com.todomonolith.todobe.entities;
 
+import com.todomonolith.todobe.enums.AccountTypeEnum;
+import com.todomonolith.todobe.enums.ThemeEnum;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -18,11 +20,13 @@ public class Setting {
     @Column(nullable = false)
     private Long id;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "theme")
-    private String theme;
+    private ThemeEnum theme;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "account_type")
-    private String accountType;
+    private AccountTypeEnum accountType;
 
     @OneToOne
     @JoinColumn(name = "user_id",  nullable = false, unique = true)

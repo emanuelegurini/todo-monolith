@@ -1,5 +1,6 @@
 package com.todomonolith.todobe.entities;
 
+import com.todomonolith.todobe.enums.TaskStatusEnum;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,6 +23,14 @@ public class Task {
 
     @Column(name = "description")
     private String description;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private TaskStatusEnum status;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "priority")
+    private TaskStatusEnum priority;
 
     @ManyToOne
     @JoinColumn( name = "project_id")
