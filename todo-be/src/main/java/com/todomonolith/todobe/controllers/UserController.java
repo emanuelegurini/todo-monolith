@@ -5,6 +5,7 @@ import com.todomonolith.todobe.dto.UserDTO;
 import com.todomonolith.todobe.entities.User;
 import com.todomonolith.todobe.mappers.UserMapper;
 import com.todomonolith.todobe.services.UserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,7 @@ public class UserController {
     private final UserService userService;
     private final UserMapper userMapper;
 
+    @Tag(name = "getBooks", description = "retrieve all the user from the db")
     @GetMapping
     public List<UserDTO> getUsers() {
         return userMapper.toDTOList((List<User>) userService.findAll());
