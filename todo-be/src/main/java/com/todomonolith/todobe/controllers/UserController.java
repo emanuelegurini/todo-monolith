@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -35,6 +36,17 @@ public class UserController {
     @GetMapping("/{id}")
     public Optional<UserDTO> getUser(@PathVariable Long id) {
         return userService.findById(id).map(userMapper::toDTO);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<UserDTO> updateUser(
+            @PathVariable Long id,
+            @RequestBody Map<String, Object> updates
+    ) {
+        return userService.partialUpdate(id, updates)
+                .map(userMapper::toDTO)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/user/{email}")

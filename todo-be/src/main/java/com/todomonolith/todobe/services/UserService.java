@@ -8,6 +8,7 @@ import com.todomonolith.todobe.repositories.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -43,6 +44,20 @@ public class UserService {
 
     public void deleteById(Long id) {
         userRepository.deleteById(id);
+    }
+
+    public Optional<User> partialUpdate(Long id, Map<String, Object> updates) {
+        return userRepository.findById(id)
+                .map(user -> {
+                    updates.forEach((key, value) -> {
+                        switch (key) {
+                            case "name" -> user.setName((String) value);
+                            case "surname" -> user.setSurname((String) value);
+                            case "email" -> user.setEmail((String) value);
+                        }
+                    });
+                    return userRepository.save(user);
+                });
     }
 
 }
