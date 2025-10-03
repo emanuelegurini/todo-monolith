@@ -8,6 +8,7 @@ import {
 import DefaultLayout from "./common/components/DefaultLayout.jsx";
 import HomePage from "./pages/HomePage";
 import ErrorPage from "./pages/error-pages.jsx";
+import './i18n';
 
 const router = createBrowserRouter([
     {

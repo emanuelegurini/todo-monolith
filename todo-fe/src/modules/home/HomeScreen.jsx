@@ -1,5 +1,9 @@
+import { useTranslation } from 'react-i18next';
+
 const HomeScreen = () => {
-    return (<h1>hello, I'm the Home screen</h1>)
+    const { t } = useTranslation()
+
+    return <h1>{t('pateta')}</h1>
 }
 
 export default HomeScreen;
