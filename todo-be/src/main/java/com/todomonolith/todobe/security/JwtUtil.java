@@ -86,11 +86,52 @@ public class JwtUtil {
      * @return All claims from the token
      */
     private Claims extractAllClaims(String token) {
+        // SECURITY: Strict validation - reject tokens with invalid Base64 padding
+        validateTokenFormat(token);
+
         return Jwts.parser()
                 .verifyWith(getSigningKey())  // Verify signature with our secret key
                 .build()
                 .parseSignedClaims(token)     // Parse and validate the token
                 .getPayload();                // Get the claims (payload)
+    }
+
+    /**
+     * Validates the JWT token format to ensure strict Base64 encoding.
+     * This prevents accepting tokens with modified padding bits that decode to the same value.
+     *
+     * SECURITY RATIONALE:
+     * Base64 padding bits in the last character can be modified without changing the decoded value.
+     * For example, in HS512 signatures, 'fw', 'f1', 'f2', etc. all decode identically.
+     * This method ensures only the canonical (properly padded) form is accepted.
+     *
+     * @param token The JWT token to validate
+     * @throws io.jsonwebtoken.MalformedJwtException if token format is invalid
+     */
+    private void validateTokenFormat(String token) {
+        String[] parts = token.split("\\.");
+        if (parts.length != 3) {
+            throw new io.jsonwebtoken.MalformedJwtException("JWT must have 3 parts");
+        }
+
+        // Validate signature part has correct Base64URL encoding with proper padding
+        String signature = parts[2];
+
+        // Verify by decoding and re-encoding to get canonical form
+        if (signature.length() > 0) {
+            try {
+                byte[] decoded = java.util.Base64.getUrlDecoder().decode(signature);
+                String canonical = java.util.Base64.getUrlEncoder().withoutPadding().encodeToString(decoded);
+
+                if (!signature.equals(canonical)) {
+                    throw new io.jsonwebtoken.security.SignatureException(
+                        "JWT signature has invalid Base64 padding - token may have been tampered with"
+                    );
+                }
+            } catch (IllegalArgumentException e) {
+                throw new io.jsonwebtoken.MalformedJwtException("Invalid Base64 encoding in signature");
+            }
+        }
     }
 
     /**
@@ -111,16 +152,26 @@ public class JwtUtil {
      * - Subject: Username (email)
      * - Issued At: When token was created
      * - Expiration: When token expires
-     * - Any additional custom claims
+     * - Custom claims: id, name, surname, email
      *
      * @param userDetails The authenticated user's details
      * @return A new JWT token string
      */
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
-        // You can add custom claims here, for example:
-        // claims.put("role", "USER");
-        // claims.put("userId", user.getId());
+
+        // Extract user information from UserDetailsImpl
+        if (userDetails instanceof com.todomonolith.todobe.security.UserDetailsImpl) {
+            com.todomonolith.todobe.security.UserDetailsImpl userDetailsImpl =
+                (com.todomonolith.todobe.security.UserDetailsImpl) userDetails;
+            com.todomonolith.todobe.entities.User user = userDetailsImpl.getUser();
+
+            // Add custom claims
+            claims.put("id", user.getId());
+            claims.put("name", user.getName());
+            claims.put("surname", user.getSurname());
+            claims.put("email", user.getEmail());
+        }
 
         return createToken(claims, userDetails.getUsername());
     }

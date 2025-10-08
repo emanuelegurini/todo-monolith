@@ -76,20 +76,20 @@
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-api</artifactId>
-            <version>0.12.6</version>
+            <version>0.12.5</version>
         </dependency>
-        <!-- JWT Implementation: The actual implementation of the JWT specification -->
+
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-impl</artifactId>
-            <version>0.12.6</version>
+            <version>0.12.5</version>
             <scope>runtime</scope>
         </dependency>
-        <!-- JWT Jackson: Allows JWT library to serialize/deserialize JSON using Jackson -->
+
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-jackson</artifactId>
-            <version>0.12.6</version>
+            <version>0.12.5</version>
             <scope>runtime</scope>
         </dependency>
     </dependencies>

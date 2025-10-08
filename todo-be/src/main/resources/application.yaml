@@ -16,7 +16,7 @@ jwt:
   # Secret key used to sign JWT tokens - MUST be kept secret in production
   # In production, use environment variables or secure vault instead of hardcoding
   # This key should be at least 256 bits (32 characters) for HS256 algorithm
-  secret: mySecretKeyForJwtTokenGenerationAndValidationMustBeLongEnough123456
+  secret: 1861XViFpn04HQ/QqrpOZrvBf8ZVMoRDGWKNmw5heA/l+VyuLVk+/PVpxUKZxc5u
   # Token expiration time in milliseconds (86400000 ms = 24 hours)
   # After this time, the token becomes invalid and user must login again
   expiration: 86400000
